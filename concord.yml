@@ -112,7 +112,7 @@ flows:
     - try:
         - set:
             deployType: "MiddlewareServers"
-        - script: "/scripts/transformer.py"
+        - script: "scripts/transformer.py"
       error:
         - log: "Error has occurred while constructing the inventory.ini file from the transformer.py script"
 
