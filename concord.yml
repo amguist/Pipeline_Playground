@@ -129,10 +129,10 @@ flows:
             playbook: "ansibles/Create_File_Structure"
             auth:
               privateKey:
-                user: root
+                user: azurerootadmin
                 secret:
                   org: "Default"
-                  name: deployment_key
+                  name: conans_key
             debug: true
             extraVars:
               serviceDestinationPath: ${serviceDestinationPath}
