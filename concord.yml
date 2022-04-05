@@ -21,7 +21,11 @@ forms:
 
   manualServiceConfigurationDetailform:
     - configurationType: { label: "Configuration Type", type: "string", allow: [ "CCM", "CCM2" ]}
-    - configurationBaseUrl: { label: "Configuration Base URL", type: "string" }
+    - configurationBaseUrl: { label: "Configuration Base URL", type: "string", allow: [ "https://admin.ccm.stg.walmart.com", "https://admin.ccm.prod.walmart.com" ] }
+
+  manualServiceDeployCheckform:
+    - environment: { label: "Environment To Deploy", type: "string", readonly: true, allow: "${targetEnvironment}" }
+    - servers: { label: "Servers To Deploy", type: "string+", allow: ["node1.neoworkz.org"] }
 
 flows:
   default:
@@ -37,11 +41,7 @@ flows:
     - call: targetDeployment
       withItems: ${targetEnvironments}
 
-
-  targetDeployment:
-    - log: "Preparing deployment for environment: ${item}"
-    - set:
-        targetEnvironment: ${item}
+  assignConfigurationStore:
     - log: "Service requires configurations?"
     - form: manualServiceConfigurationCheckform
     - set:
@@ -55,3 +55,29 @@ flows:
       else:
         - log: "Configuration value is set to ${configurationsNeeded} ..... skipping"
 
+  targetDeployment:
+    - log: "Preparing deployment for environment: ${item}"
+    - set:
+        targetEnvironment: ${item}
+    - call: assignConfigurationStore
+    - call: manualServiceDeployCheckform
+    - set:
+        targetServers: ${manualServiceDeployCheckform.servers}
+
+  deployToEnvironment:
+    - try:
+        - switch: ${targetEnvironment}
+          Development:
+            - log: "Starting Process To Deploy To The Deployment Servers"
+          QA:
+            - log: "Starting Process To Deploy To The QA Servers"
+          Stage:
+            - log: "Starting Process To Deploy To The Stage Servers"
+          Performance:
+            - log: "Starting Process To Deploy To The Performance Servers"
+          Production:
+            - log: "Starting Process To Deploy To The Production Servers"
+      error:
+        - log: "Exception has been caught during the deployment to enviroment: ${targetEnvironment}"
+        - log: "Last Known Error is: ${lastError.getCause()}"
+        - throw: ${lastError.message}
