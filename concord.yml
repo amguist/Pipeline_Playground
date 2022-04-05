@@ -1,6 +1,6 @@
 configuration:
   dependencies:
-    - "mvn://org.python:jython-standalone:2.7.1"
+    - "mvn://org.python:jython-standalone:2.7.2"
     - "mvn://com.walmartlabs.concord.plugins.basic:ansible-tasks:1.91.0"
 
   arguments:
@@ -10,6 +10,10 @@ configuration:
     errorMessage: ""
     inventoryFile: "inventory.ini"
 
+  meta:
+    artifactId: ""
+    version: ""
+    completedStage: ""
 
 forms:
   manualServiceInfoCheckform:
@@ -134,6 +138,8 @@ flows:
               configDestinationPath: ${configDestinationPath}
 
   constructInventoryFile:
+    - log: "Targets: ${targets}"
+    - log: "Invoking transformer.py to create necessary inventory.ini file"
     - try:
         - set:
             deployType: "MiddlewareServers"
