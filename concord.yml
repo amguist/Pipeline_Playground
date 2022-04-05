@@ -19,4 +19,4 @@ forms:
 flows:
   default:
     - log: "Process ID is ${concordPid}"
-    
+    - form: manualServiceDeployCheckform
