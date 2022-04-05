@@ -6,8 +6,10 @@ configuration:
   arguments:
     ansibleStatFile: "_attachments/ansible_stats.json"
     concordPid: ${txId}
-    errorMessage: ""
     defaultBaseServerPath: "/home/azurerootadmin"
+    errorMessage: ""
+    inventoryFile: "inventory.ini"
+
 
 forms:
   manualServiceInfoCheckform:
