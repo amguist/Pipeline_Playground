@@ -24,7 +24,7 @@ forms:
     - configurationBaseUrl: { label: "Configuration Base URL", type: "string", allow: [ "https://admin.ccm.stg.walmart.com", "https://admin.ccm.prod.walmart.com" ] }
 
   manualServiceDeployCheckform:
-    - environment: { label: "Environment To Deploy", type: "string" }
+    - services: { label: "Services To Deploy", type: "string+" }
     - servers: { label: "Servers To Deploy", type: "string+" }
 
 flows:
@@ -63,6 +63,8 @@ flows:
     - form: manualServiceDeployCheckform
     - set:
         targetServers: ${manualServiceDeployCheckform.servers}
+        targetServices: ${manualServiceDeployCheckform.services}
+    - call: deployToEnvironment
 
   deployToEnvironment:
     - try:
@@ -70,30 +72,48 @@ flows:
           Development:
             - log: "Starting Process To Deploy To The Deployment Servers"
             - call: deployCheckpoint
-            - call: deploy
+            - call: stageTarget
+              withItems: ${targetServices}
           QA:
             - log: "Starting Process To Deploy To The QA Servers"
             - call: deployCheckpoint
-            - call: deploy
+            - call: stageTarget
+              withItems: ${targetServices}
           Stage:
             - log: "Starting Process To Deploy To The Stage Servers"
             - call: deployCheckpoint
-            - call: deploy
+            - call: stageTarget
+              withItems: ${targetServices}
           Performance:
             - log: "Starting Process To Deploy To The Performance Servers"
             - call: deployCheckpoint
-            - call: deploy
+            - call: stageTarget
+              withItems: ${targetServices}
           Production:
             - log: "Starting Process To Deploy To The Production Servers"
             - call: deployCheckpoint
-            - call: deploy
+            - call: stageTarget
+              withItems: ${targetServices}
       error:
         - log: "Exception has been caught during the deployment to enviroment: ${targetEnvironment}"
         - log: "Last Known Error is: ${lastError.getCause()}"
         - throw: ${lastError.message}
 
-  deploy:
-    - log: "Need to specify those services to deploy as part of initiative: ${targetInitiative}"
+  stageTarget:
+    - log: "Preparing to stage service: ${item} which is part of the initiative: ${targetInitiative}"
+    - if: ${targetServers != ""}
+      then:
+        - set:
+            targetService: ${item}
+        - call: constructInventoryFile
+
+  constructInventoryFile:
+    - try:
+        - set:
+            deployType: "MiddlewareServers"
+        - script: "/scripts/transformer.py"
+      error:
+        - log: "Error has occurred while constructing the inventory.ini file from the transformer.py script"
 
   deployCheckpoint:
     - switch: ${targetEnvironment}
