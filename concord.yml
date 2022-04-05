@@ -107,8 +107,8 @@ flows:
       then:
         - set:
             targetService: ${item}
-            serviceDestinationPath: "${defaultBaseServerPath}/${initiative}/services/${targetService}/${version}"
-            configDestinationPath: "${defaultBaseServerPath}/${initiative}/services/${targetService}/${version}/configs"
+            serviceDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}"
+            configDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}/configs"
         - call: constructInventoryFile
         - call: createDirectoryStructureAnsible
 
