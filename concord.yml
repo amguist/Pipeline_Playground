@@ -114,6 +114,8 @@ flows:
             configDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}/configs"
         - call: constructInventoryFile
         - call: createDirectoryStructureAnsible
+      else:
+        - log: "Target Servers right is empty"
 
   createDirectoryStructureAnsible:
     - try:
