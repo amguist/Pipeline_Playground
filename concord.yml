@@ -7,6 +7,7 @@ configuration:
     ansibleStatFile: "_attachments/ansible_stats.json"
     concordPid: ${txId}
     errorMessage: ""
+    defaultBaseServerPath: "/home/azurerootadmin"
 
 forms:
   manualServiceInfoCheckform:
@@ -106,7 +107,27 @@ flows:
       then:
         - set:
             targetService: ${item}
+            serviceDestinationPath: "${defaultBaseServerPath}/${initiative}/services/${targetService}/${version}"
+            configDestinationPath: "${defaultBaseServerPath}/${initiative}/services/${targetService}/${version}/configs"
         - call: constructInventoryFile
+        - call: createDirectoryStructureAnsible
+
+  createDirectoryStructureAnsible:
+    - try:
+        - task: ansible
+          in:
+            playbook: "ansibles/Create_File_Structure"
+            auth:
+              privateKey:
+                user: root
+                secret:
+                  org: "Default"
+                  name: deployment_key
+            debug: true
+            extraVars:
+              serviceDestinationPath: ${serviceDestinationPath}
+              configDestinationPath: ${configDestinationPath}
+          out: ansibleResult
 
   constructInventoryFile:
     - try:

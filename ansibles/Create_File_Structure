@@ -1,0 +1,21 @@
+---
+- hosts: MiddlewareServers
+  environment:
+    LC_ALL: "en_US.UTF-8"
+    LANG: "en_US.UTF-8"
+  tasks:
+    - become: ys
+      become_user: azurerootadmin
+      block:
+        - name: Create Service Folder If It Doesn't Exist
+          file:
+            path: "{{ item }}"
+            state: directory
+          with_items:
+            - "{{ serviceDestinationPath }}"
+        - name: Create Config Folder If It Doesn't Exists
+          file:
+            path: "{{ item }}"
+            state: directory
+          with_items:
+            - "{{ configDestinationPath }}"
