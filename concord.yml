@@ -24,8 +24,8 @@ forms:
     - configurationBaseUrl: { label: "Configuration Base URL", type: "string", allow: [ "https://admin.ccm.stg.walmart.com", "https://admin.ccm.prod.walmart.com" ] }
 
   manualServiceDeployCheckform:
-    - environment: { label: "Environment To Deploy", type: "string", readonly: true, allow: "${targetEnvironment}" }
-    - servers: { label: "Servers To Deploy", type: "string+", allow: ["node1.neoworkz.org"] }
+    - environment: { label: "Environment To Deploy", type: "string" }
+    - servers: { label: "Servers To Deploy", type: "string+" }
 
 flows:
   default:
