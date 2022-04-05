@@ -10,7 +10,7 @@ configuration:
 forms:
   manualServiceInfoCheckform:
     - initiative: { label: "Product Initiative", type: "string", allow: [ "hawkeye-goldenarcher-fk" ]}
-    - environment: { label: "Deployment Environment", type: "string+", allow: [ "Development", "QA", "Stage", "Performance", "Production" ]}
+    - environments: { label: "Deployment Environment", type: "string+", allow: [ "Development", "QA", "Stage", "Performance", "Production" ]}
     - groupId: { label: "Product Group Identifier", type: "string"}
     - artifactId: { label: "Product Artifact Identifier", type: "string" }
     - version: { label: "Product Version", type: "string" }
