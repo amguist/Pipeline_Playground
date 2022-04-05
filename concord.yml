@@ -60,7 +60,7 @@ flows:
     - set:
         targetEnvironment: ${item}
     - call: assignConfigurationStore
-    - call: manualServiceDeployCheckform
+    - form: manualServiceDeployCheckform
     - set:
         targetServers: ${manualServiceDeployCheckform.servers}
 
@@ -69,15 +69,43 @@ flows:
         - switch: ${targetEnvironment}
           Development:
             - log: "Starting Process To Deploy To The Deployment Servers"
+            - call: deployCheckpoint
+            - call: deploy
           QA:
             - log: "Starting Process To Deploy To The QA Servers"
+            - call: deployCheckpoint
+            - call: deploy
           Stage:
             - log: "Starting Process To Deploy To The Stage Servers"
+            - call: deployCheckpoint
+            - call: deploy
           Performance:
             - log: "Starting Process To Deploy To The Performance Servers"
+            - call: deployCheckpoint
+            - call: deploy
           Production:
             - log: "Starting Process To Deploy To The Production Servers"
+            - call: deployCheckpoint
+            - call: deploy
       error:
         - log: "Exception has been caught during the deployment to enviroment: ${targetEnvironment}"
         - log: "Last Known Error is: ${lastError.getCause()}"
         - throw: ${lastError.message}
+
+  deploy:
+    - log: "Need to specify those services to deploy as part of initiative: ${targetInitiative}"
+
+  deployCheckpoint:
+    - switch: ${targetEnvironment}
+      Development:
+        - checkpoint: "DEPLOY_DEV"
+      QA:
+        - checkpoint: "DEPLOY_QA"
+      Stage:
+        - checkpoint: "DEPLOY_STG"
+      Performance:
+        - checkpoint: "DEPLOY_PERF"
+      Production:
+        - checkpoint: "DEPLOY_PROD"
+
+
