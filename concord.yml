@@ -8,7 +8,7 @@ configuration:
     errorMessage: ""
 
 forms:
-  manualServiceDeployCheckform:
+  manualServiceInfoCheckform:
     - initiative: { label: "Product Initiative", type: "string", allow: [ "hawkeye-goldenarcher-fk" ]}
     - environment: { label: "Deployment Environment", type: "string+", allow: [ "Development", "QA", "Stage", "Performance", "Production" ]}
     - groupId: { label: "Product Group Identifier", type: "string"}
@@ -16,7 +16,34 @@ forms:
     - version: { label: "Product Version", type: "string" }
     - packaging: { label: "Deployment Type", type: "string", allow: [ "jar", "tar", "zip"] }
 
+  manualServiceConfigurationCheckform:
+    - configurationsRequired: { label: "Service requires configurations for ${targetEnvironment}?", type: "boolean" }
+
+  manualServiceConfigurationDetailform:
+    - configurationType: { label: "Configuration Type", type: "string", allow: [ "CCM", "CCM2" ]}
+    - configurationBaseUrl: { label: "Configuration Base URL", type: "string" }
+
 flows:
   default:
     - log: "Process ID is ${concordPid}"
-    - form: manualServiceDeployCheckform
+    - form: manualServiceInfoCheckform
+    - set:
+        targetInitiative: ${manualServiceDeployCheckform.initiative}
+        targetEnvironment: ${manualServiceDeployCheckform.environment}
+        groupId: ${manualServiceDeployCheckform.groupId}
+        artifactId: ${manualServiceDeployCheckform.artifactId}
+        version: ${manualServiceDeployCheckform.version}
+        packaging: ${manualServiceDeployCheckform.packaging}
+    - log: "Service requires configurations?"
+    - form: manualServiceConfigurationCheckform
+    - set:
+        configurationsNeeded: ${manualServiceConfigurationCheckform.configurationsRequired}
+    - if: ${configurationsNeeded}
+      then:
+        - form: manualServiceConfigurationDetailform
+        - set:
+            configurationType: ${manualServiceConfigurationDetailform.configurationType}
+            configurationBaseUrl: ${manualServiceConfigurationDetailform.configurationBaseUrl}
+      else:
+        - log: "Configuration value is set to ${configurationsNeeded} ..... skipping"
+    
