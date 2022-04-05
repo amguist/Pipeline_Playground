@@ -10,6 +10,7 @@ def construct_inventory_file(inventoryFile, targets):
         f.write("\n")
         f.write("[MiddlewareServers:vars]\n")
         f.write("ansible_connecton=ssh\n")
+        f.write("scp_if_ssh = True")
 
 def print_from_inventory_file(inventoryFile):
     with open(inventoryFile, "r") as file:
