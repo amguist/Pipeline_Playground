@@ -127,7 +127,6 @@ flows:
             extraVars:
               serviceDestinationPath: ${serviceDestinationPath}
               configDestinationPath: ${configDestinationPath}
-          out: ansibleResult
 
   constructInventoryFile:
     - try:
