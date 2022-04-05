@@ -16,7 +16,7 @@ def print_from_inventory_file(inventoryFile):
         data = file.read()
     return data
 
-if __name__ in [ "__main__" ]:
+if __name__ in [ "__main__", "__builtin__" ]:
     print("Executing transformer.py")
     construct_inventory_file(inventoryFile, targets)
     data = print_from_inventory_file(inventoryFile)
