@@ -105,6 +105,7 @@ flows:
 
   stageTarget:
     - log: "Preparing to stage service: ${item} which is part of the initiative: ${targetInitiative}"
+    - log: "Target Servers: ${targetServers}"
     - if: ${targetServers != ""}
       then:
         - set:
@@ -113,7 +114,6 @@ flows:
             serviceDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}"
             configDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}/configs"
         - call: constructInventoryFile
-        - call: createDirectoryStructureAnsible
       else:
         - log: "Target Servers right is empty"
 
