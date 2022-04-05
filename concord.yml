@@ -40,6 +40,8 @@ flows:
 
   targetDeployment:
     - log: "Preparing deployment for environment: ${item}"
+    - set:
+        targetEnvironment: ${item}
     - log: "Service requires configurations?"
     - form: manualServiceConfigurationCheckform
     - set:
