@@ -29,7 +29,7 @@ flows:
     - form: manualServiceInfoCheckform
     - set:
         targetInitiative: ${manualServiceInfoCheckform.initiative}
-        targetEnvironment: ${manualServiceInfoCheckform.environment}
+        targetEnvironments: ${manualServiceInfoCheckform.environments}
         groupId: ${manualServiceInfoCheckform.groupId}
         artifactId: ${manualServiceInfoCheckform.artifactId}
         version: ${manualServiceInfoCheckform.version}
@@ -46,4 +46,10 @@ flows:
             configurationBaseUrl: ${manualServiceConfigurationDetailform.configurationBaseUrl}
       else:
         - log: "Configuration value is set to ${configurationsNeeded} ..... skipping"
+    - call: targetDeployment
+      withItems: ${targetEnvironments}
+
+
+  targetDeployment:
+    - log: "Preparing deployment for environment: ${item}"
 
