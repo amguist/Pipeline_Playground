@@ -108,6 +108,7 @@ flows:
     - if: ${targetServers != ""}
       then:
         - set:
+            targets: ${targetServers}
             targetService: ${item}
             serviceDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}"
             configDestinationPath: "${defaultBaseServerPath}/${targetInitiative}/services/${targetService}/${version}/configs"
