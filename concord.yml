@@ -28,12 +28,12 @@ flows:
     - log: "Process ID is ${concordPid}"
     - form: manualServiceInfoCheckform
     - set:
-        targetInitiative: ${manualServiceDeployCheckform.initiative}
-        targetEnvironment: ${manualServiceDeployCheckform.environment}
-        groupId: ${manualServiceDeployCheckform.groupId}
-        artifactId: ${manualServiceDeployCheckform.artifactId}
-        version: ${manualServiceDeployCheckform.version}
-        packaging: ${manualServiceDeployCheckform.packaging}
+        targetInitiative: ${manualServiceInfoCheckform.initiative}
+        targetEnvironment: ${manualServiceInfoCheckform.environment}
+        groupId: ${manualServiceInfoCheckform.groupId}
+        artifactId: ${manualServiceInfoCheckform.artifactId}
+        version: ${manualServiceInfoCheckform.version}
+        packaging: ${manualServiceInfoCheckform.packaging}
     - log: "Service requires configurations?"
     - form: manualServiceConfigurationCheckform
     - set:
@@ -46,4 +46,4 @@ flows:
             configurationBaseUrl: ${manualServiceConfigurationDetailform.configurationBaseUrl}
       else:
         - log: "Configuration value is set to ${configurationsNeeded} ..... skipping"
-    
+
